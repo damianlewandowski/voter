@@ -1,0 +1,45 @@
+import React, { Fragment } from "react";
+import { Route, Switch } from "react-router-dom";
+import Container from "@material-ui/core/Container";
+import Navbar from "../layout/Navbar";
+import Alert from "../layout/Alert";
+import ProtectedRoute from "./ProtectedRoute";
+import Home from "../Home";
+import Login from "../auth/Login";
+import Register from "../auth/Register";
+import Profile from "../Profile";
+import { makeStyles } from "@material-ui/core";
+import NotFound from "../layout/NotFound";
+
+const useStyles = makeStyles(theme => ({
+  container: {
+    marginTop: theme.spacing(5)
+  }
+}));
+
+const Routes = () => {
+  const classes = useStyles();
+
+  return (
+    <Fragment>
+      <Route
+        path="/"
+        render={({ location, ...rest }) => (
+          <Navbar location={location} {...rest} />
+        )}
+      />
+      <Container maxWidth="md" className={classes.container}>
+        <Alert />
+        <Switch>
+          <Route exact path="/" component={Home} />
+          <Route exact path="/login" component={Login} />
+          <Route exact path="/register" component={Register} />
+          <ProtectedRoute exact path="/profile" component={Profile} />
+          <Route component={NotFound} />
+        </Switch>
+      </Container>
+    </Fragment>
+  );
+};
+
+export default Routes;

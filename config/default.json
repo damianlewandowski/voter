@@ -1,0 +1,7 @@
+{
+  "mongoURI": "mongodb+srv://damian-lewandowski:Password1@cluster0-zvdbk.mongodb.net/test?retryWrites=true&w=majority",
+  "githubClientId": "ffa536dcc6989ec5603f",
+  "githubClientSecret": "fc8a0dd5811cf7cb92455eff65c27dd2e2773a72",
+  "googleClientId": "123749136802-cuda01uptngjgnev3vs6b8hnpm54i461.apps.googleusercontent.com",
+  "googleClientSecret": "EIB0v9pr1drEojvtMP6gPJ1Z"
+}
