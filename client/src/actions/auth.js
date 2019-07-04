@@ -1,11 +1,5 @@
 import axios from "axios";
-import {
-  REGISTER_SUCCESS,
-  REGISTER_FAILURE,
-  LOAD_USER_SUCCESS,
-  LOAD_USER_FAILURE,
-  LOGOUT
-} from "./types";
+import { LOAD_USER_SUCCESS, LOAD_USER_FAILURE, LOGOUT } from "./types";
 import { setAlert } from "./alert";
 
 export const loadUser = () => async dispatch => {
