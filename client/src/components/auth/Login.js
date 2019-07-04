@@ -81,7 +81,9 @@ const Login = ({ handleSubmit, pristine, submitting, history, dispatch }) => {
       </Typography>
 
       <div className={classes.oauth}>
-        <h3>Connect with a social network</h3>
+        <Typography variant="h6" className={classes.title}>
+          Connect with a social network
+        </Typography>
         <Button
           className={classes.googleButton}
           variant="contained"
