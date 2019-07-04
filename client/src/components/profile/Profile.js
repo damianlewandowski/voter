@@ -246,23 +246,6 @@ const Profile = ({ user, isLoading }) => {
           </Zoom>
         </Box>
       </Grid>
-
-      {/* <div>
-          <strong>Email: </strong>
-          <p>damian20lewandowski@Gmail.com</p>
-        </div>
-        <div>
-          <strong>Date: </strong>
-          <p>2019-07-03T13:18:54.631Z</p>
-        </div>
-        <div>
-          <strong>Bio: </strong>
-          <p>
-            Just another guy who is passionate about javascript and web
-            development.
-          </p>
-        </div> */}
-      {/* </Grid> */}
     </Fragment>
   );
 };
@@ -278,37 +261,3 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps)(Profile);
-
-{
-  /* <Grid className={classes.info} container>
-            <Grid item xs={12}>
-              <Grid container alignItems="center" className={classes}>
-                <MailIcon className={classes.icon} />
-                <Typography variant="body1">
-                  damian20lewandowski@gmail.com
-                </Typography>
-              </Grid>
-            </Grid>
-            <Grid item xs={12}>
-              <Grid container alignItems="center">
-                <DateIcon className={classes.icon} />
-                <Typography variant="body1">
-                  2019-07-03T13:18:54.631Z
-                </Typography>
-              </Grid>
-            </Grid>
-            <Grid item xs={12}>
-              <Grid container alignItems="center">
-                <Grid item xs={1}>
-                  <DescriptionIcon className={classes.icon} />
-                </Grid>
-                <Grid item xs={11}>
-                  <Typography variant="body1" className={classes.bio}>
-                    Just another guy who is passionate about javascript and web
-                    development.
-                  </Typography>
-                </Grid>
-              </Grid>
-            </Grid>
-          </Grid> */
-}
