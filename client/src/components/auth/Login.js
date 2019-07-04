@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import { GooglePlusBox, GithubBox } from "mdi-material-ui";
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
+import Typography from "@material-ui/core/Typography";
 import { deepOrange, blueGrey } from "@material-ui/core/colors";
 import axios from "axios";
 import { LOGIN_SUCCESS, LOGIN_FAILURE } from "../../actions/types";
@@ -35,6 +36,9 @@ const useStyles = makeStyles(theme => ({
     "&:hover": {
       background: blueGrey[900]
     }
+  },
+  title: {
+    marginBottom: theme.spacing(4)
   }
 }));
 
@@ -72,7 +76,9 @@ const Login = ({ handleSubmit, pristine, submitting, history, dispatch }) => {
 
   return (
     <Fragment>
-      <h1>Login</h1>
+      <Typography variant="h3" className={classes.title}>
+        Login
+      </Typography>
 
       <div className={classes.oauth}>
         <h3>Connect with a social network</h3>
@@ -104,7 +110,6 @@ const Login = ({ handleSubmit, pristine, submitting, history, dispatch }) => {
           name="email"
           label="Email"
           type="email"
-          className={classes.textField}
           margin="normal"
           variant="outlined"
           required
@@ -114,7 +119,6 @@ const Login = ({ handleSubmit, pristine, submitting, history, dispatch }) => {
           name="password"
           label="Password"
           type="password"
-          className={classes.textField}
           margin="normal"
           variant="outlined"
           required

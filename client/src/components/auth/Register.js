@@ -4,6 +4,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import { Field, reduxForm, SubmissionError } from "redux-form";
 import Button from "@material-ui/core/Button";
+import Typography from "@material-ui/core/Typography";
 import axios from "axios";
 import { extractErrors } from "../../utils/error";
 import { setAlert } from "../../actions/alert";
@@ -13,6 +14,9 @@ const useStyles = makeStyles(theme => ({
     display: "flex",
     flexDirection: "column",
     margin: "0 auto"
+  },
+  title: {
+    marginBottom: theme.spacing(4)
   }
 }));
 
@@ -72,12 +76,13 @@ let Register = ({ handleSubmit, pristine, submitting, history, dispatch }) => {
 
   return (
     <form className={classes.container} onSubmit={handleSubmit(onSubmit)}>
-      <h1>Register</h1>
+      <Typography variant="h3" className={classes.title}>
+        Register
+      </Typography>
       <Field
         component={renderTextField}
         name="name"
         label="Name"
-        className={classes.textField}
         margin="normal"
         variant="outlined"
       />
@@ -87,7 +92,6 @@ let Register = ({ handleSubmit, pristine, submitting, history, dispatch }) => {
         label="Email"
         placeholder="example@gmail.com"
         type="email"
-        className={classes.textField}
         margin="normal"
         variant="outlined"
       />
@@ -96,7 +100,6 @@ let Register = ({ handleSubmit, pristine, submitting, history, dispatch }) => {
         name="password"
         label="Password"
         type="password"
-        className={classes.textField}
         margin="normal"
         variant="outlined"
       />
@@ -105,7 +108,6 @@ let Register = ({ handleSubmit, pristine, submitting, history, dispatch }) => {
         name="password2"
         label="Password Confirmation"
         type="password"
-        className={classes.textField}
         margin="normal"
         variant="outlined"
       />
@@ -114,7 +116,6 @@ let Register = ({ handleSubmit, pristine, submitting, history, dispatch }) => {
         name="bio"
         label="Bio"
         placeholder="Say something about yourself"
-        className={classes.textField}
         margin="normal"
         variant="outlined"
       />
