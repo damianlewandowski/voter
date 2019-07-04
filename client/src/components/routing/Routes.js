@@ -7,9 +7,10 @@ import ProtectedRoute from "./ProtectedRoute";
 import Home from "../Home";
 import Login from "../auth/Login";
 import Register from "../auth/Register";
-import Profile from "../Profile";
+import Profile from "../profile/Profile";
 import { makeStyles } from "@material-ui/core";
 import NotFound from "../layout/NotFound";
+import EditProfile from "../profile/EditProfile";
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -34,7 +35,9 @@ const Routes = () => {
           <Route exact path="/" component={Home} />
           <Route exact path="/login" component={Login} />
           <Route exact path="/register" component={Register} />
-          <ProtectedRoute exact path="/profile" component={Profile} />
+          <Route exact path="/profile" component={Profile} />
+          <Route exact path="/profile/edit" component={EditProfile} />
+          {/* <ProtectedRoute exact path="/profile" component={Profile} /> */}
           <Route component={NotFound} />
         </Switch>
       </Container>
