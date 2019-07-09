@@ -1,9 +1,6 @@
 const mongoose = require("mongoose");
 
 const UserSchema = new mongoose.Schema({
-  name: {
-    type: String
-  },
   email: {
     type: String,
     unique: true
@@ -22,9 +19,6 @@ const UserSchema = new mongoose.Schema({
     type: String
   },
   profileImageUrl: {
-    type: String
-  },
-  bio: {
     type: String
   }
 });

@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 const RenderTextField = ({
   input,
   label,
-  meta: { touched, error, warning },
+  meta: { error, warning },
   ...rest
 }) => {
   return (

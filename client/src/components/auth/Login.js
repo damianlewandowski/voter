@@ -8,8 +8,8 @@ import Typography from "@material-ui/core/Typography";
 import { deepOrange, blueGrey } from "@material-ui/core/colors";
 import axios from "axios";
 import { LOGIN_SUCCESS, LOGIN_FAILURE } from "../../actions/types";
-import RenderTextField from "./RenderTextField";
 import { setAlert } from "../../actions/alert";
+import RenderTextField from "../field-components/RenderTextField";
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -53,7 +53,6 @@ const Login = ({ handleSubmit, pristine, submitting, history, dispatch }) => {
     const body = { email, password };
     try {
       const res = await axios.post("/api/auth/local", body);
-      console.log(res);
       dispatch({
         type: LOGIN_SUCCESS,
         payload: res.data

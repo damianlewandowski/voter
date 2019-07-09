@@ -60,9 +60,7 @@ router.get(
 router.get(
   "/google",
   passport.authenticate("google", {
-    scope: ["profile", "email"],
-    accessType: "offline",
-    prompt: "consent"
+    scope: ["profile", "email"]
   })
 );
 
