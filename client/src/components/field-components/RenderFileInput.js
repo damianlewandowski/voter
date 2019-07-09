@@ -1,5 +1,6 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core";
+import PropTypes from "prop-types";
 
 const useStyles = makeStyles(theme => ({
   file: {
@@ -11,7 +12,6 @@ const useStyles = makeStyles(theme => ({
 const RenderFileInput = ({
   handleSubmit,
   input: { onChange },
-  label,
   children,
   onSubmit,
   ...rest
@@ -40,6 +40,10 @@ const RenderFileInput = ({
   );
 };
 
-RenderFileInput.propTypes = {};
+RenderFileInput.propTypes = {
+  handleSubmit: PropTypes.func.isRequired,
+  input: PropTypes.object.isRequired,
+  onSubmit: PropTypes.func.isRequired
+};
 
 export default RenderFileInput;

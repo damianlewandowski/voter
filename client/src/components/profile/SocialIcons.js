@@ -9,6 +9,7 @@ import {
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core";
 import { red, indigo, purple, blue } from "@material-ui/core/colors";
+import PropTypes from "prop-types";
 
 const useStyles = makeStyles(theme => ({
   youtube: {
@@ -107,6 +108,8 @@ const SocialIcons = ({ links }) => {
   );
 };
 
-SocialIcons.propTypes = {};
+SocialIcons.propTypes = {
+  links: PropTypes.array
+};
 
 export default SocialIcons;

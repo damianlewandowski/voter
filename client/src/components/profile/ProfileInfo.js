@@ -97,6 +97,13 @@ const ProfileInfo = ({ isEditable, email, date, website, bio, social }) => {
   );
 };
 
-ProfileInfo.propTypes = {};
+ProfileInfo.propTypes = {
+  isEditable: PropTypes.bool.isRequired,
+  email: PropTypes.string,
+  date: PropTypes.string,
+  website: PropTypes.string,
+  bio: PropTypes.string,
+  social: PropTypes.object
+};
 
 export default ProfileInfo;
