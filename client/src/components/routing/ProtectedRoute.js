@@ -24,7 +24,7 @@ const ProtectedRoute = ({
 ProtectedRoute.propTypes = {
   isAuthenticated: PropTypes.bool.isRequired,
   isLoading: PropTypes.bool.isRequired,
-  component: PropTypes.object.isRequired
+  component: PropTypes.oneOfType([PropTypes.func, PropTypes.object]).isRequired
 };
 
 const mapStateToProps = state => ({

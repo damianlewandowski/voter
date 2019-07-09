@@ -15,7 +15,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const EditProfile = props => {
+const EditProfile = () => {
   const classes = useStyles();
 
   return (

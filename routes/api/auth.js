@@ -26,12 +26,15 @@ router.post("/local", (req, res, next) => {
       return next(err);
     }
     if (info) {
-      return res.send(info);
+      return res.status(404).send(info);
     }
+
     req.logIn(user, async err => {
       if (err) {
+        console.dir(err);
         return next(err);
       }
+
       const loggedUser = await User.findById(user._id).select("-password");
       res.json(loggedUser);
     });
@@ -87,14 +90,7 @@ router.get("/login/failed", (req, res) => {
 // @access   Public
 router.get("/logout", (req, res) => {
   req.logout();
-  req.session.destroy(err => {
-    if (err) {
-      console.log("Error: Failed to destroy the session during loggout.", err);
-      return res.json({ logoutSuccess: false });
-    }
-    req.user = null;
-    res.json({ logoutSuccess: true });
-  });
+  res.json({ success: true });
 });
 
 module.exports = router;

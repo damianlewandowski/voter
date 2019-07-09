@@ -78,7 +78,7 @@ const useStyles = makeStyles(theme => ({
     left: "50%",
     top: "50%",
     transform: "translate(-50%,-50%)"
-  },
+  }
 }));
 
 let Profile = ({
@@ -313,7 +313,11 @@ let Profile = ({
 Profile.propTypes = {
   user: PropTypes.object,
   profile: PropTypes.object,
-  isLoading: PropTypes.bool.isRequired
+  isLoading: PropTypes.bool.isRequired,
+  getProfile: PropTypes.func.isRequired,
+  dispatch: PropTypes.func.isRequired,
+  handleSubmit: PropTypes.func.isRequired,
+  updateProfile: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({

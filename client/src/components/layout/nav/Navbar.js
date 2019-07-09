@@ -15,7 +15,7 @@ import NotificationsIcon from "@material-ui/icons/Notifications";
 import MoreIcon from "@material-ui/icons/MoreVert";
 import { ExitToApp } from "mdi-material-ui";
 import MobileMenu from "./MobileMenu";
-import ProfileMenu from "../../profile/ProfileMenu";
+import ProfileMenu from "./ProfileMenu";
 import { logout } from "../../../actions/auth";
 
 const useStyles = makeStyles(theme => ({

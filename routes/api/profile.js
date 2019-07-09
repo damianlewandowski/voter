@@ -4,12 +4,10 @@ const passportConfig = require("../../config/passport");
 const Profile = require("../../models/Profile");
 const multer = require("multer");
 
+// For storing images locally on public/images/uploads/
 const upload = multer({
   storage: multer.diskStorage({
-    destination: "public/images/uploads/",
-    filename: (req, file, cb) => {
-      cb(null, file.originalname);
-    }
+    destination: "public/images/uploads/"
   })
 });
 
@@ -55,7 +53,6 @@ router.post("/", passportConfig.isAuthenticated, async (req, res) => {
   console.dir(req.body);
 
   const profileFields = {};
-  // profileFields.user = req.user._id;
 
   if (website) profileFields.website = website;
   if (location) profileFields.location = location;

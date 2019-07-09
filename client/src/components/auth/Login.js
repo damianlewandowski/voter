@@ -65,7 +65,7 @@ const Login = ({ handleSubmit, pristine, submitting, history, dispatch }) => {
         type: LOGIN_FAILURE,
         payload: err.response.data
       });
-      dispatch(setAlert("Login failed.", "error", 3000));
+      dispatch(setAlert(err.response.data.msg, "error", 3000));
     }
   };
 

@@ -4,6 +4,7 @@ const path = require("path");
 const passport = require("passport");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
+const cookieSession = require("cookie-session");
 
 const app = express();
 
@@ -13,6 +14,13 @@ connectDB();
 /**
  * Init Middleware
  */
+app.use(
+  cookieSession({
+    name: "session",
+    keys: ["thisappisawesome"],
+    maxAge: 24 * 60 * 60 * 100
+  })
+);
 app.use(express.json({ extended: false }));
 app.use(express.urlencoded({ extended: true }));
 app.use(session({ secret: "anything" }));
