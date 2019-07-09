@@ -26,6 +26,10 @@ require("./config/passport");
 // Define Routes
 app.use("/api/users", require("./routes/api/users"));
 app.use("/api/auth", require("./routes/api/auth"));
+app.use("/api/profile", require("./routes/api/profile"));
+
+// Serve images from paths like localhost:5000/:img_path
+app.use(express.static(path.resolve("public/images/uploads/")));
 
 // Serve static assets in production
 if (process.env.NODE_ENV === "production") {

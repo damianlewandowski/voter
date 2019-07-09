@@ -1,13 +1,13 @@
-import React, { Fragment } from "react";
-import PropTypes from "prop-types";
-import { Field, reduxForm } from "redux-form";
-import RenderTextField from "../auth/RenderTextField";
+import React from "react";
+import { Field } from "redux-form";
+import RenderTextField from "../field-components/RenderTextField";
 import { makeStyles } from "@material-ui/core/styles";
-import { Grid, List, ListItem } from "@material-ui/core";
+import { List, ListItem } from "@material-ui/core";
 
 const useStyles = makeStyles(theme => ({
   field: {
-    flexGrow: 1
+    flexGrow: 1,
+    marginTop: 0
   },
   list: {
     display: "block",
@@ -29,7 +29,7 @@ const EditProfile = props => {
           type="text"
           margin="normal"
           variant="outlined"
-          required
+          autoComplete="off"
         />
       </ListItem>
       <ListItem>
@@ -41,19 +41,17 @@ const EditProfile = props => {
           type="text"
           margin="normal"
           variant="outlined"
-          required
         />
       </ListItem>
       <ListItem>
         <Field
           className={classes.field}
           component={RenderTextField}
-          name="email"
-          label="Email"
-          type="email"
+          name="location"
+          label="Location"
+          type="text"
           margin="normal"
           variant="outlined"
-          required
         />
       </ListItem>
       <ListItem>
@@ -65,7 +63,61 @@ const EditProfile = props => {
           type="text"
           margin="normal"
           variant="outlined"
-          required
+        />
+      </ListItem>
+      <ListItem>
+        <Field
+          className={classes.field}
+          component={RenderTextField}
+          name="youtube"
+          label="Youtube"
+          type="text"
+          margin="normal"
+          variant="outlined"
+        />
+      </ListItem>
+      <ListItem>
+        <Field
+          className={classes.field}
+          component={RenderTextField}
+          name="twitter"
+          label="Twitter"
+          type="text"
+          margin="normal"
+          variant="outlined"
+        />
+      </ListItem>
+      <ListItem>
+        <Field
+          className={classes.field}
+          component={RenderTextField}
+          name="facebook"
+          label="Facebook"
+          type="text"
+          margin="normal"
+          variant="outlined"
+        />
+      </ListItem>
+      <ListItem>
+        <Field
+          className={classes.field}
+          component={RenderTextField}
+          name="linkedin"
+          label="Linkedin"
+          type="text"
+          margin="normal"
+          variant="outlined"
+        />
+      </ListItem>
+      <ListItem>
+        <Field
+          className={classes.field}
+          component={RenderTextField}
+          name="instagram"
+          label="Instagram"
+          type="text"
+          margin="normal"
+          variant="outlined"
         />
       </ListItem>
     </List>
@@ -74,6 +126,4 @@ const EditProfile = props => {
 
 EditProfile.propTypes = {};
 
-export default reduxForm({
-  form: "editProfile"
-})(EditProfile);
+export default EditProfile;

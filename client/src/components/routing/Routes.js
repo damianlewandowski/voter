@@ -1,7 +1,7 @@
 import React, { Fragment } from "react";
 import { Route, Switch } from "react-router-dom";
 import Container from "@material-ui/core/Container";
-import Navbar from "../layout/Navbar";
+import Navbar from "../layout/nav/Navbar";
 import Alert from "../layout/Alert";
 import ProtectedRoute from "./ProtectedRoute";
 import Home from "../Home";
@@ -14,7 +14,8 @@ import EditProfile from "../profile/EditProfile";
 
 const useStyles = makeStyles(theme => ({
   container: {
-    marginTop: theme.spacing(5)
+    marginTop: theme.spacing(5),
+    marginBottom: theme.spacing(5)
   }
 }));
 
@@ -35,9 +36,8 @@ const Routes = () => {
           <Route exact path="/" component={Home} />
           <Route exact path="/login" component={Login} />
           <Route exact path="/register" component={Register} />
-          <Route exact path="/profile" component={Profile} />
-          <Route exact path="/profile/edit" component={EditProfile} />
-          {/* <ProtectedRoute exact path="/profile" component={Profile} /> */}
+          <ProtectedRoute exact path="/profile" component={Profile} />
+          <ProtectedRoute exact path="/profile/edit" component={EditProfile} />
           <Route component={NotFound} />
         </Switch>
       </Container>

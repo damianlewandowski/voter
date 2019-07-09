@@ -4,6 +4,7 @@ const { check, validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
 
 const User = require("../../models/User");
+const Profile = require("../../models/Profile");
 
 // @route    POST api/users
 // @desc     Register user
@@ -14,7 +15,6 @@ router.post(
     check("email", "Please include a valid email")
       .isEmail()
       .custom(async (value, { req: { body: { email } } }) => {
-        // console.log(value);
         const user = await User.findOne({ email });
         if (user) {
           throw new Error("This email is already taken.");
@@ -50,11 +50,9 @@ router.post(
       }
 
       user = new User({
-        name,
         email,
         password,
-        profileImageUrl,
-        bio
+        profileImageUrl
       });
 
       const salt = await bcrypt.genSalt(10);
@@ -62,6 +60,12 @@ router.post(
       user.password = await bcrypt.hash(password, salt);
 
       const newUser = await user.save();
+
+      await new Profile({
+        user: user.id,
+        name,
+        bio
+      }).save();
 
       res.status(201).json(newUser);
     } catch (err) {

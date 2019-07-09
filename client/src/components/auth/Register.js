@@ -1,13 +1,13 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
-import TextField from "@material-ui/core/TextField";
 import { Field, reduxForm, SubmissionError } from "redux-form";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import axios from "axios";
 import { extractErrors } from "../../utils/error";
 import { setAlert } from "../../actions/alert";
+import RenderTextField from "../field-components/RenderTextField";
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -19,24 +19,6 @@ const useStyles = makeStyles(theme => ({
     marginBottom: theme.spacing(4)
   }
 }));
-
-const renderTextField = ({
-  input,
-  label,
-  meta: { error, warning },
-  ...rest
-}) => {
-  return (
-    <TextField
-      {...input}
-      label={label}
-      error={!!error}
-      helperText={error}
-      warning={warning}
-      {...rest}
-    />
-  );
-};
 
 let Register = ({ handleSubmit, pristine, submitting, history, dispatch }) => {
   const classes = useStyles();
@@ -80,14 +62,14 @@ let Register = ({ handleSubmit, pristine, submitting, history, dispatch }) => {
         Register
       </Typography>
       <Field
-        component={renderTextField}
+        component={RenderTextField}
         name="name"
         label="Name"
         margin="normal"
         variant="outlined"
       />
       <Field
-        component={renderTextField}
+        component={RenderTextField}
         name="email"
         label="Email"
         placeholder="example@gmail.com"
@@ -96,7 +78,7 @@ let Register = ({ handleSubmit, pristine, submitting, history, dispatch }) => {
         variant="outlined"
       />
       <Field
-        component={renderTextField}
+        component={RenderTextField}
         name="password"
         label="Password"
         type="password"
@@ -104,7 +86,7 @@ let Register = ({ handleSubmit, pristine, submitting, history, dispatch }) => {
         variant="outlined"
       />
       <Field
-        component={renderTextField}
+        component={RenderTextField}
         name="password2"
         label="Password Confirmation"
         type="password"
@@ -112,7 +94,7 @@ let Register = ({ handleSubmit, pristine, submitting, history, dispatch }) => {
         variant="outlined"
       />
       <Field
-        component={renderTextField}
+        component={RenderTextField}
         name="bio"
         label="Bio"
         placeholder="Say something about yourself"

@@ -1,8 +1,5 @@
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
-const passportJWT = require("passport-jwt");
-const JWTStrategy = passportJWT.Strategy;
-const ExtractJWT = passportJWT.ExtractJwt;
 const GithubStrategy = require("passport-github").Strategy;
 const GoogleStrategy = require("passport-google-oauth").OAuth2Strategy;
 
@@ -16,7 +13,6 @@ passport.serializeUser((user, done) => {
 });
 
 passport.deserializeUser(async (id, done) => {
-  console.log("what2");
   try {
     const user = await User.findById(id);
     done(null, user);
@@ -106,21 +102,26 @@ passport.use(
       try {
         const currentUser = await User.findOne({ googleId: profile.id });
 
+        // If new user, save him to db
         if (!currentUser) {
           const newUser = await new User({
             googleId: profile.id,
-            profileImageUrl: profile._json.picture || "",
-            email: profile._json.email || "",
+            email: profile._json.email || ""
+          }).save();
+
+          // Create a profile for user
+          await new Profile({
+            user: newUser.id,
+            avatar: profile._json.picture,
             name: profile._json.name || ""
           }).save();
 
-          if (newUser) {
-            return done(null, newUser);
-          }
+          return done(null, newUser);
         }
-
-        done(currentUser);
+        // User already in db, login him
+        done(null, currentUser);
       } catch (err) {
+        console.error(err.message);
         done(err);
       }
     }

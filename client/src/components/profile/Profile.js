@@ -1,22 +1,24 @@
-import React, { Fragment, useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import { makeStyles, List, ListItem, Zoom } from "@material-ui/core";
+import { makeStyles, Zoom, Tooltip } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import Avatar from "@material-ui/core/Avatar";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import Fab from "@material-ui/core/Fab";
-import MailIcon from "@material-ui/icons/MailOutlined";
-import DescriptionIcon from "@material-ui/icons/DescriptionOutlined";
-import DateIcon from "@material-ui/icons/DateRangeOutlined";
 import EditIcon from "@material-ui/icons/EditOutlined";
 import SaveIcon from "@material-ui/icons/SaveOutlined";
-import Moment from "react-moment";
-import moment from "moment";
-import clsx from "clsx";
-import EditProfile from "./EditProfile";
+import BackIcon from "@material-ui/icons/ArrowBackOutlined";
+import { getProfile, updateProfile } from "../../actions/profile";
+import defaultAvatar from "../../images/default-profile.png";
+import { reduxForm, Field } from "redux-form";
+import axios from "axios";
+import { setAlert } from "../../actions/alert";
+import RenderFileInput from "../field-components/RenderFileInput";
+import { PROFILE_ERROR } from "../../actions/types";
+import ProfileInfo from "./ProfileInfo";
 
 const useStyles = makeStyles(theme => ({
   centerLoader: {
@@ -26,7 +28,8 @@ const useStyles = makeStyles(theme => ({
   },
   avatar: {
     width: 200,
-    height: 200
+    height: 200,
+    background: theme.palette.common.white
   },
   profile: {
     marginTop: theme.spacing(3)
@@ -48,9 +51,14 @@ const useStyles = makeStyles(theme => ({
     top: theme.spacing(2),
     right: theme.spacing(2)
   },
+  backFab: {
+    position: "absolute",
+    top: theme.spacing(2),
+    left: theme.spacing(2)
+  },
   avatarContainer: {
     position: "relative",
-    cursor: "pointer"
+    borderRadius: "50%"
   },
   overlay: {
     position: "absolute",
@@ -62,7 +70,8 @@ const useStyles = makeStyles(theme => ({
     width: "200px",
     height: "200px",
     transform: "translate(-50%,-50%)",
-    borderRadius: "50%"
+    borderRadius: "50%",
+    cursor: "pointer"
   },
   overlayText: {
     position: "absolute",
@@ -70,12 +79,21 @@ const useStyles = makeStyles(theme => ({
     top: "50%",
     transform: "translate(-50%,-50%)"
   },
-  displayNone: {
-    display: "none"
-  }
 }));
 
-const Profile = ({ user, isLoading }) => {
+let Profile = ({
+  isLoading,
+  user,
+  getProfile,
+  profile,
+  dispatch,
+  handleSubmit,
+  updateProfile
+}) => {
+  useEffect(() => {
+    getProfile();
+  }, [getProfile]);
+
   const classes = useStyles();
 
   const [isEditable, setIsEditable] = useState(false);
@@ -89,7 +107,58 @@ const Profile = ({ user, isLoading }) => {
     );
   }
 
-  const handleValueChange = newIsEditable => {
+  const onSubmit = async values => {
+    const config = {
+      headers: {
+        "Content-Type": "application/json"
+      }
+    };
+
+    const body = JSON.stringify({ ...values });
+
+    try {
+      const res = await axios.post("/api/profile", body, config);
+
+      updateProfile(res.data);
+
+      dispatch(setAlert("Profile has been succesfully updated", "success"));
+
+      // Go back to Profile view
+      handleIsEditClick(isEditable);
+    } catch (err) {
+      dispatch(setAlert("Something went wrong.", "danger"));
+    }
+  };
+
+  // Submits image file to the server
+  const onFileSubmit = async ({ avatar }) => {
+    const formData = new FormData();
+    formData.append("avatar", avatar);
+    const config = {
+      headers: {
+        "Content-Type": "multipart/form-data"
+      }
+    };
+
+    try {
+      const res = await axios.post("/api/profile/avatar", formData, config);
+
+      updateProfile(res.data);
+
+      dispatch(
+        setAlert("Profile image has been succesfuly changed.", "success")
+      );
+    } catch (err) {
+      console.err(err);
+
+      dispatch({
+        type: PROFILE_ERROR,
+        payload: err.response.data.errors
+      });
+    }
+  };
+
+  const handleIsEditClick = newIsEditable => {
     setIsEditable(!newIsEditable);
   };
 
@@ -101,37 +170,46 @@ const Profile = ({ user, isLoading }) => {
     setIsAvatarHovered(false);
   };
 
+  const { email = "noemail@gmail.com", date } = user;
+  const {
+    name = "Nameless",
+    website,
+    location,
+    avatar,
+    bio,
+    social,
+    position
+  } = profile;
+
   const fabs = [
     {
       color: "primary",
       className: classes.fab,
       icon: <EditIcon />,
-      label: "Add",
-      isEdit: false
+      label: "Edit",
+      isEdit: false,
+      onClick: () => handleIsEditClick(isEditable)
     },
     {
       color: "secondary",
       className: classes.fab,
       icon: <SaveIcon />,
       label: "Save",
-      isEdit: true
+      isEdit: true,
+      type: "submit"
+    },
+    {
+      color: "secondary",
+      className: classes.backFab,
+      icon: <BackIcon />,
+      label: "Go Back",
+      isEdit: true,
+      onClick: () => handleIsEditClick(isEditable)
     }
   ];
 
-  const transitionStyles = {
-    entering: { background: "blue" },
-    entered: { background: "red" },
-    exiting: { background: "green" },
-    exited: { background: "orange" }
-  };
-
-  const defaultStyle = {
-    background: "pink"
-  };
-
-  // const { name, email, date, profileImageUrl, bio } = user;
   return (
-    <Fragment>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <Grid
         className={classes.profile}
         container
@@ -152,14 +230,17 @@ const Profile = ({ user, isLoading }) => {
               in={fab.isEdit === isEditable}
               timeout={500}
             >
-              <Fab
-                className={classes.fab}
-                color={fab.color}
-                label={fab.label}
-                onClick={() => handleValueChange(fab.isEdit)}
-              >
-                {fab.icon}
-              </Fab>
+              <Tooltip title={fab.label}>
+                <Fab
+                  className={fab.className}
+                  color={fab.color}
+                  label={fab.label}
+                  onClick={fab.onClick}
+                  type={fab.type}
+                >
+                  {fab.icon}
+                </Fab>
+              </Tooltip>
             </Zoom>
           ))}
 
@@ -169,95 +250,89 @@ const Profile = ({ user, isLoading }) => {
               onMouseEnter={() => showAvatarOverlay()}
               onMouseLeave={() => hideAvatarOverlay()}
             >
-              {(isEditable || isAvatarHovered) && (
-                <div className={classes.overlay}>
-                  <Typography
-                    variant="body2"
-                    className={classes.overlayText}
-                    align="center"
-                  >
-                    Click here to change your photo
-                  </Typography>
-                </div>
-              )}
+              <Field
+                component={RenderFileInput}
+                name="avatar"
+                handleSubmit={handleSubmit}
+                onSubmit={onFileSubmit}
+                accept="image/*"
+              >
+                {(isEditable || isAvatarHovered) && (
+                  <div className={classes.overlay}>
+                    <Typography
+                      variant="body2"
+                      className={classes.overlayText}
+                      align="center"
+                    >
+                      Click here to change your photo
+                    </Typography>
+                  </div>
+                )}
+              </Field>
               <Avatar
                 alt="profile-img"
-                src="https://avatars1.githubusercontent.com/u/17913606?s=400&u=fc14258392276891979c9dbdd68d8db7867f580b&v=4"
+                src={avatar ? avatar : defaultAvatar}
                 className={classes.avatar}
               />
             </div>
           </Grid>
           <Grid container justify="center">
             <Typography variant="h3" align="center">
-              Damian Lewandowski
+              {name}
             </Typography>
           </Grid>
-          <Grid container justify="center">
-            <Typography variant="h5" className={classes.name}>
-              Fullstack Developer
-            </Typography>
-          </Grid>
+
+          {position && (
+            <Grid container justify="center">
+              <Typography variant="h5" className={classes.name}>
+                {position}
+              </Typography>
+            </Grid>
+          )}
+
+          {location && (
+            <Grid container justify="center">
+              <Typography variant="caption">{location || ""}</Typography>
+            </Grid>
+          )}
         </Box>
 
-        <Box
-          className={classes.avatarNameBox}
-          border={1}
-          borderColor="primary.main"
-          p={1}
-        >
-          <Zoom
-            in={!isEditable}
-            timeout={300}
-            className={classes[clsx({ displayNone: isEditable })]}
-          >
-            <List>
-              <ListItem>
-                <MailIcon className={classes.icon} />
-                <Typography variant="body1">
-                  damian20lewandowski@gmail.com
-                </Typography>
-              </ListItem>
-              <ListItem>
-                <DateIcon className={classes.icon} />
-                <Typography variant="body1">
-                  <Moment format="DD/MM/YYYY">
-                    {moment.utc("2019-07-03T13:18:54.631Z")}
-                  </Moment>
-                </Typography>
-              </ListItem>
-              <ListItem>
-                <DescriptionIcon className={classes.icon} />
-                <Typography variant="body1" className={classes.bio}>
-                  Just another guy who is passionate about javascript and web
-                  development.
-                </Typography>
-              </ListItem>
-            </List>
-          </Zoom>
-
-          <Zoom
-            in={isEditable}
-            timeout={300}
-            className={classes[clsx({ displayNone: !isEditable })]}
-          >
-            <div>
-              <EditProfile />
-            </div>
-          </Zoom>
-        </Box>
+        <ProfileInfo
+          email={email}
+          date={date}
+          website={website}
+          bio={bio}
+          social={social}
+          isEditable={isEditable}
+        />
       </Grid>
-    </Fragment>
+    </form>
   );
 };
 
 Profile.propTypes = {
   user: PropTypes.object,
+  profile: PropTypes.object,
   isLoading: PropTypes.bool.isRequired
 };
 
 const mapStateToProps = state => ({
   user: state.auth.user,
-  isLoading: state.auth.isLoading
+  profile: state.profile.profile,
+  isLoading: state.profile.isLoading || state.auth.isLoading,
+  initialValues: state.profile.profile
 });
 
-export default connect(mapStateToProps)(Profile);
+const mapDispatchToProps = {
+  getProfile,
+  updateProfile
+};
+
+Profile = reduxForm({
+  form: "profile"
+})(Profile);
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Profile);

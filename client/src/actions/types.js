@@ -7,3 +7,6 @@ export const LOAD_USER_FAILURE = "LOAD_USER_FAILURE";
 export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
 export const LOGIN_FAILURE = "LOGIN_FAILURE";
 export const LOGOUT = "LOGOUT";
+export const GET_PROFILE = "GET_PROFILE";
+export const PROFILE_ERROR = "PROFILE_ERROR";
+export const UPDATE_PROFILE = "UPDATE_PROFILE";
