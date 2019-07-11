@@ -50,8 +50,6 @@ router.post("/", passportConfig.isAuthenticated, async (req, res) => {
     instagram
   } = req.body;
 
-  console.dir(req.body);
-
   const profileFields = {};
 
   if (website) profileFields.website = website;

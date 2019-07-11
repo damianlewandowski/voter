@@ -19,7 +19,8 @@ import { makeStyles } from "@material-ui/core/styles";
 const useStyles = makeStyles(theme => ({
   box: {
     flexGrow: 1,
-    position: "relative"
+    position: "relative",
+    maxWidth: "100%"
   },
   icon: {
     fontSize: 30,
@@ -45,7 +46,9 @@ const ProfileInfo = ({ isEditable, email, date, website, bio, social }) => {
           {email && (
             <ListItem>
               <MailIcon className={classes.icon} />
-              <Typography variant="body1">{email}</Typography>
+              <Typography noWrap variant="body1">
+                {email}
+              </Typography>
             </ListItem>
           )}
 
@@ -70,12 +73,11 @@ const ProfileInfo = ({ isEditable, email, date, website, bio, social }) => {
           {bio && (
             <ListItem>
               <DescriptionIcon className={classes.icon} />
-              <Typography variant="body1" className={classes.bio}>
+              <Typography variant="body1" noWrap>
                 {bio}
               </Typography>
             </ListItem>
           )}
-
           {social && (
             <ListItem>
               <SocialIcons links={social} />
