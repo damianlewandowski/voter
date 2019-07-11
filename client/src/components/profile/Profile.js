@@ -213,7 +213,7 @@ let Profile = ({
       <Grid
         className={classes.profile}
         container
-        spacing={5}
+        spacing={1}
         direction="column"
       >
         <Box

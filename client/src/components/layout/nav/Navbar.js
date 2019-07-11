@@ -12,6 +12,7 @@ import Badge from "@material-ui/core/Badge";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import MailIcon from "@material-ui/icons/Mail";
 import NotificationsIcon from "@material-ui/icons/Notifications";
+import PlusIcon from "@material-ui/icons/AddCircle";
 import MoreIcon from "@material-ui/icons/MoreVert";
 import { ExitToApp } from "mdi-material-ui";
 import MobileMenu from "./MobileMenu";
@@ -79,7 +80,8 @@ function Navbar({ isAuthenticated, logout, history }) {
         icon: <MailIcon />
       },
       text: "Messages",
-      to: "/messages"
+      to: "/messages",
+      onClick: handleMobileMenuClose
     },
     {
       ariaLabel: "Show 17 new notifications",
@@ -89,7 +91,14 @@ function Navbar({ isAuthenticated, logout, history }) {
         icon: <NotificationsIcon />
       },
       text: "Notifications",
-      to: "/notifications"
+      to: "/notifications",
+      onClick: handleMobileMenuClose
+    },
+    {
+      to: "/add-poll",
+      text: "Add Poll",
+      icon: <PlusIcon />,
+      onClick: handleMobileMenuClose
     },
     {
       ariaLabel: "Account of current user",
@@ -104,27 +113,41 @@ function Navbar({ isAuthenticated, logout, history }) {
 
   const renderAuthLinks = (
     <div>
-      {authLinks.map((authLink, i) => (
-        <IconButton
-          key={`Nav-auth-link-${i}`}
-          edge={authLink.edge}
-          aria-label={authLink.ariaLabel}
-          aria-controls={authLink.ariaControls}
-          aria-haspopup={authLink.ariaHasPopup}
-          onClick={authLink.onClick}
-          color="inherit"
-        >
-          {authLink.badge && (
-            <Badge
-              badgeContent={authLink.badge.content}
-              color={authLink.badge.color}
-            >
-              {authLink.badge.icon}
-            </Badge>
-          )}
-          {authLink.icon}
-        </IconButton>
-      ))}
+      {authLinks.map((authLink, i) =>
+        !authLink.icon && !authLink.badge ? (
+          <Button
+            key={authLink.to}
+            color="inherit"
+            component={Link}
+            to={authLink.to}
+            size="large"
+          >
+            {authLink.text}
+          </Button>
+        ) : (
+          <IconButton
+            key={`Nav-auth-link-${i}`}
+            edge={authLink.edge}
+            aria-label={authLink.ariaLabel}
+            aria-controls={authLink.ariaControls}
+            aria-haspopup={authLink.ariaHasPopup}
+            onClick={authLink.onClick}
+            color="inherit"
+            component={authLink.to ? Link : IconButton}
+            to={authLink.to}
+          >
+            {authLink.badge && (
+              <Badge
+                badgeContent={authLink.badge.content}
+                color={authLink.badge.color}
+              >
+                {authLink.badge.icon}
+              </Badge>
+            )}
+            {authLink.icon}
+          </IconButton>
+        )
+      )}
     </div>
   );
 

@@ -35,6 +35,7 @@ require("./config/passport");
 app.use("/api/users", require("./routes/api/users"));
 app.use("/api/auth", require("./routes/api/auth"));
 app.use("/api/profile", require("./routes/api/profile"));
+app.use("/api/polls", require("./routes/api/polls"));
 
 // Serve images from paths like localhost:5000/:img_path
 app.use(express.static(path.resolve("public/images/uploads/")));
