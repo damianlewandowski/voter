@@ -14,6 +14,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Field, reduxForm } from "redux-form";
 import RenderRadioGroup from "../field-components/RenderRadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
+import PollChart from "./PollChart";
 
 const useStyles = makeStyles(theme => ({
   centerLoader: {
@@ -22,7 +23,7 @@ const useStyles = makeStyles(theme => ({
     justifyContent: "center"
   },
   title: {
-    marginBottom: theme.spacing(4)
+    marginBottom: theme.spacing(8)
   },
   item: {
     width: "100%"
@@ -36,6 +37,18 @@ const useStyles = makeStyles(theme => ({
   },
   goBack: {
     marginBottom: theme.spacing(2)
+  },
+  chart: {
+    // [theme.breakpoints.down("md")]: {
+    justifyContent: "center"
+    // }
+  },
+  formContainer: {
+    display: "flex",
+    alignItems: "center"
+  },
+  form: {
+    flexGrow: 1
   }
 }));
 
@@ -76,8 +89,6 @@ let Poll = ({
     vote(poll._id, option.optionName);
   };
 
-  console.log(poll);
-
   return (
     <Grid container alignItems="center" direction="column">
       <Grid container>
@@ -95,39 +106,45 @@ let Poll = ({
         {poll.title}
       </Typography>
 
-      <Grid className={classes.item} item md={8} xs={10}>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <FormControl component="fieldset" className={classes.formControl}>
-            <Box
-              className={classes.box}
-              border={1}
-              borderColor="primary.main"
-              borderRadius={5}
-              p={2}
-            >
-              <Field name="optionName" component={RenderRadioGroup}>
-                {poll.options.map(po => (
-                  <Fragment key={`optionName-${po.optionName}`}>
-                    <FormControlLabel
-                      value={po.optionName}
-                      label={po.optionName}
-                      control={<Radio />}
-                    />
-                    <strong>{po.votes.length}</strong>
-                  </Fragment>
-                ))}
-              </Field>
-            </Box>
-            <Button
-              type="submit"
-              variant="contained"
-              color="primary"
-              size="large"
-            >
-              Vote
-            </Button>
-          </FormControl>
-        </form>
+      <Grid className={classes.item} item md={12}>
+        <Grid container direction="row" justify="space-between">
+          <Grid item xs={12} md={6} className={classes.formContainer}>
+            <form onSubmit={handleSubmit(onSubmit)} className={classes.form}>
+              <FormControl component="fieldset" className={classes.formControl}>
+                <Box
+                  className={classes.box}
+                  border={1}
+                  borderColor="primary.main"
+                  borderRadius={5}
+                  p={2}
+                >
+                  <Field name="optionName" component={RenderRadioGroup}>
+                    {poll.options.map(po => (
+                      <Fragment key={`optionName-${po.optionName}`}>
+                        <FormControlLabel
+                          value={po.optionName}
+                          label={po.optionName}
+                          control={<Radio />}
+                        />
+                      </Fragment>
+                    ))}
+                  </Field>
+                </Box>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  size="large"
+                >
+                  Vote
+                </Button>
+              </FormControl>
+            </form>
+          </Grid>
+          <Grid item xs={12} className={classes.chart} md={5}>
+            <PollChart poll={poll} />
+          </Grid>
+        </Grid>
       </Grid>
     </Grid>
   );
