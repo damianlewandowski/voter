@@ -5,7 +5,9 @@ import {
   GET_POLL_FAILURE,
   CLEAR_POLL,
   VOTE_POLL_SUCCESS,
-  VOTE_POLL_FAILURE
+  VOTE_POLL_FAILURE,
+  DELETE_POLL_SUCCESS,
+  DELETE_POLL_FAILURE
 } from "../actions/types";
 
 const initialState = {
@@ -34,6 +36,7 @@ export default function(state = initialState, action) {
     case GET_POLLS_FAILURE:
     case GET_POLL_FAILURE:
     case VOTE_POLL_FAILURE:
+    case DELETE_POLL_FAILURE:
       return {
         ...state,
         isLoading: false,
@@ -49,6 +52,7 @@ export default function(state = initialState, action) {
         isLoading: false
       };
     }
+    case DELETE_POLL_SUCCESS:
     case CLEAR_POLL:
       return {
         ...state,

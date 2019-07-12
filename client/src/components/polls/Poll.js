@@ -1,6 +1,6 @@
 import React, { useEffect, useCallback, Fragment } from "react";
 import { connect } from "react-redux";
-import { getPoll, clearPoll, vote } from "../../actions/polls";
+import { getPoll, clearPoll, vote, deletePoll } from "../../actions/polls";
 import { Link } from "react-router-dom";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Typography from "@material-ui/core/Typography";
@@ -8,6 +8,7 @@ import Grid from "@material-ui/core/Grid";
 import FormControl from "@material-ui/core/FormControl";
 import Radio from "@material-ui/core/Radio";
 import ArrowBack from "@material-ui/icons/ArrowBackOutlined";
+import DeleteIcon from "@material-ui/icons/DeleteOutlineOutlined";
 import Button from "@material-ui/core/Button";
 import Box from "@material-ui/core/Box";
 import { makeStyles } from "@material-ui/core/styles";
@@ -50,11 +51,14 @@ const useStyles = makeStyles(theme => ({
 let Poll = ({
   isLoading,
   poll,
-  getPoll,
   match,
+  vote,
+  auth,
+  getPoll,
   clearPoll,
   handleSubmit,
-  vote
+  deletePoll,
+  history
 }) => {
   const classes = useStyles();
 
@@ -86,7 +90,7 @@ let Poll = ({
 
   return (
     <Grid container alignItems="center" direction="column">
-      <Grid container>
+      <Grid container justify="space-between">
         <Button
           className={classes.goBack}
           component={Link}
@@ -96,6 +100,17 @@ let Poll = ({
           <ArrowBack />
           Go Back
         </Button>
+        {auth.isAuthenticated && auth.user._id === poll.owner && (
+          <Button
+            className={classes.goBack}
+            variant="contained"
+            color="secondary"
+            onClick={() => deletePoll(poll._id, history)}
+          >
+            <DeleteIcon />
+            remove this poll
+          </Button>
+        )}
       </Grid>
       <Typography className={classes.title} variant="h2">
         {poll.title}
@@ -152,11 +167,12 @@ Poll = reduxForm({
 const mapStateToProps = (state, ownProps) => {
   return {
     poll: state.polls.poll,
-    isLoading: state.polls.isLoading || !state.polls.poll
+    isLoading: state.polls.isLoading || !state.polls.poll,
+    auth: state.auth
   };
 };
 
-const mapDispatchToProps = { getPoll, clearPoll, vote };
+const mapDispatchToProps = { getPoll, clearPoll, vote, deletePoll };
 
 export default connect(
   mapStateToProps,
