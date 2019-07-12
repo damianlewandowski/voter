@@ -135,4 +135,17 @@ router.post("/vote/:id", async (req, res) => {
   }
 });
 
+// @route    DELETE api/polls/:id
+// @desc     Remove poll by id
+// @access   Private
+router.delete("/:id", passportConfig.isAuthenticated, async (req, res) => {
+  try {
+    const poll = await Poll.findOneAndDelete({ _id: req.params.id });
+    res.json(poll);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+});
+
 module.exports = router;

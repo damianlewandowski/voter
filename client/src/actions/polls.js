@@ -6,7 +6,9 @@ import {
   GET_POLL_FAILURE,
   CLEAR_POLL,
   VOTE_POLL_SUCCESS,
-  VOTE_POLL_FAILURE
+  VOTE_POLL_FAILURE,
+  DELETE_POLL_SUCCESS,
+  DELETE_POLL_FAILURE
 } from "./types";
 import { setAlert } from "./alert";
 
@@ -90,6 +92,24 @@ export const vote = (pollId, optionName) => async dispatch => {
     dispatch({
       type: VOTE_POLL_FAILURE,
       payload: err.response
+    });
+  }
+};
+
+export const deletePoll = (id, history) => async dispatch => {
+  try {
+    const res = await axios.delete(`/api/polls/${id}`);
+    console.log(res);
+
+    dispatch({
+      type: DELETE_POLL_SUCCESS
+    });
+
+    history.push("/");
+  } catch (err) {
+    dispatch({
+      type: DELETE_POLL_FAILURE,
+      payload: err.res.data.msg
     });
   }
 };
