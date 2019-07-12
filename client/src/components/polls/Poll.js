@@ -38,11 +38,6 @@ const useStyles = makeStyles(theme => ({
   goBack: {
     marginBottom: theme.spacing(2)
   },
-  chart: {
-    // [theme.breakpoints.down("md")]: {
-    justifyContent: "center"
-    // }
-  },
   formContainer: {
     display: "flex",
     alignItems: "center"
@@ -141,7 +136,7 @@ let Poll = ({
               </FormControl>
             </form>
           </Grid>
-          <Grid item xs={12} className={classes.chart} md={5}>
+          <Grid item xs={12} md={5}>
             <PollChart poll={poll} />
           </Grid>
         </Grid>
