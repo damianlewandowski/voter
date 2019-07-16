@@ -57,12 +57,12 @@ let AddPoll = ({ handleSubmit, pristine, submitting, history, dispatch }) => {
     } catch (err) {
       // Extract specific error messages from an array of object errors
       const { title, options } = extractErrors(err.response.data.errors);
-
-      dispatch(setAlert("Something went wrong.", "error"));
+      const errMsg = title || options;
+      dispatch(setAlert(errMsg, "error"));
 
       throw new SubmissionError({
         title,
-        options
+        option1: options
       });
     }
   };

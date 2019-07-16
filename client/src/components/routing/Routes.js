@@ -16,7 +16,9 @@ import ChangeEmail from "../account/ChangeEmail";
 import ChangePassword from "../account/ChangePassword";
 import AddPoll from "../polls/AddPoll";
 import Poll from "../polls/Poll";
-import Polls from "../polls/Polls";
+import PublicPolls from "../polls/PublicPolls";
+import PrivatePolls from "../polls/PrivatePolls";
+import EditPoll from "../polls/EditPoll";
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -39,15 +41,21 @@ const Routes = () => {
       <Container maxWidth="md" className={classes.container}>
         <Alert />
         <Switch>
-          <Route exact path="/" component={Home} />
+          <Route exact path="/" component={PublicPolls} />
           <Route exact path="/login" component={Login} />
           <Route exact path="/register" component={Register} />
-          <Route exact path="/polls" component={Polls} />
+          <Route exact path="/polls" component={PublicPolls} />
           <Route exact path="/polls/:id" component={Poll} />
           <ProtectedRoute exact path="/add-poll" component={AddPoll} />
           <ProtectedRoute exact path="/profile" component={Profile} />
           <ProtectedRoute exact path="/profile/edit" component={EditProfile} />
           <ProtectedRoute exact path="/account" component={Account} />
+          <ProtectedRoute
+            exact
+            path="/private-polls"
+            component={PrivatePolls}
+          />
+          <ProtectedRoute exact path="/polls/:id/edit" component={EditPoll} />
           <ProtectedRoute
             exact
             path="/account/change-password"

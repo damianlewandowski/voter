@@ -26,6 +26,9 @@ const ProfileMenu = ({
     <MenuItem onClick={handleMenuClose} component={Link} to="/account">
       My account
     </MenuItem>
+    <MenuItem onClick={handleMenuClose} component={Link} to="/private-polls">
+      My polls
+    </MenuItem>
     <MenuItem onClick={logout}>Logout</MenuItem>
   </Menu>
 );

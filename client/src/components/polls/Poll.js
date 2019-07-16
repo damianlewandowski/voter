@@ -9,6 +9,7 @@ import FormControl from "@material-ui/core/FormControl";
 import Radio from "@material-ui/core/Radio";
 import ArrowBack from "@material-ui/icons/ArrowBackOutlined";
 import DeleteIcon from "@material-ui/icons/DeleteOutlineOutlined";
+import EditIcon from "@material-ui/icons/EditOutlined";
 import Button from "@material-ui/core/Button";
 import Box from "@material-ui/core/Box";
 import { makeStyles } from "@material-ui/core/styles";
@@ -38,6 +39,9 @@ const useStyles = makeStyles(theme => ({
   },
   goBack: {
     marginBottom: theme.spacing(2)
+  },
+  editBtn: {
+    marginRight: theme.spacing(1)
   },
   formContainer: {
     display: "flex",
@@ -93,23 +97,33 @@ let Poll = ({
       <Grid container justify="space-between">
         <Button
           className={classes.goBack}
-          component={Link}
-          to="/"
+          onClick={() => history.goBack()}
           variant="contained"
         >
           <ArrowBack />
           Go Back
         </Button>
         {auth.isAuthenticated && auth.user._id === poll.owner && (
-          <Button
-            className={classes.goBack}
-            variant="contained"
-            color="secondary"
-            onClick={() => deletePoll(poll._id, history)}
-          >
-            <DeleteIcon />
-            remove this poll
-          </Button>
+          <div>
+            <Button
+              className={classes.editBtn}
+              variant="contained"
+              color="default"
+              component={Link}
+              to={`/polls/${poll._id}/edit`}
+            >
+              <EditIcon />
+              Edit
+            </Button>
+            <Button
+              variant="contained"
+              color="secondary"
+              onClick={() => deletePoll(poll._id, history)}
+            >
+              <DeleteIcon />
+              remove this poll
+            </Button>
+          </div>
         )}
       </Grid>
       <Typography className={classes.title} variant="h2">

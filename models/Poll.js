@@ -11,6 +11,12 @@ const PollSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "user"
   },
+  friends: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "user"
+    }
+  ],
   options: [
     {
       optionName: {

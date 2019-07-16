@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { check, validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
+const passportConfig = require("../../config/passport");
 
 const User = require("../../models/User");
 const Profile = require("../../models/Profile");
@@ -81,6 +82,7 @@ router.post(
 router.post(
   "/password",
   [
+    passportConfig.isAuthenticated,
     check(
       "password",
       "Please enter a password with 6 or more characters"
@@ -142,6 +144,7 @@ router.post(
 router.post(
   "/email",
   [
+    passportConfig.isAuthenticated,
     check("email", "Please include a valid email")
       .isEmail()
       .custom(async (value, { req: { body: { email } } }) => {
@@ -188,5 +191,18 @@ router.post(
     }
   }
 );
+
+// @route    GET api/users/:name
+// @desc     Find users by the
+// @access   Private
+router.get("/:name", passportConfig.isAuthenticated, async (req, res) => {
+  try {
+    const users = Users.find({ name: req.params.name });
+    res.json(users);
+  } catch (err) {
+    console.error(err);
+    res.status(404).json({ msg: "Server Error" });
+  }
+});
 
 module.exports = router;
