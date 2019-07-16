@@ -18,9 +18,6 @@ router.post(
       check("title", "Title is required")
         .not()
         .isEmpty(),
-      // check('options')
-      //   .not()
-      //   .isEmpty(),
       body("options", "You need to specify some options")
         .not()
         .isEmpty(),
@@ -54,6 +51,19 @@ router.post(
 router.get("/", async (req, res) => {
   try {
     const polls = await Poll.find().sort({ date: -1 });
+    res.json(polls);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+});
+
+// @route    GET api/polls/mine
+// @desc     Get all polls that belong to the user
+// @access   Private
+router.get("/mine", passportConfig.isAuthenticated, async (req, res) => {
+  try {
+    const polls = await Poll.find({ owner: req.user.id });
     res.json(polls);
   } catch (err) {
     console.error(err.message);
@@ -140,12 +150,67 @@ router.post("/vote/:id", async (req, res) => {
 // @access   Private
 router.delete("/:id", passportConfig.isAuthenticated, async (req, res) => {
   try {
-    const poll = await Poll.findOneAndDelete({ _id: req.params.id });
+    // Check if authorized
+    let poll = await Poll.findById(req.params.id);
+    if (poll.owner.toString() !== req.user.id) {
+      return res.status(401).json({ msg: "Not Authorized" });
+    }
+    poll = await poll.delete();
     res.json(poll);
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error");
   }
 });
+
+// @route    PUT api/polls/:id
+// @desc     Edit poll by id
+// @access   Private
+router.put(
+  "/:id",
+  [
+    passportConfig.isAuthenticated,
+    [
+      body("options", "You need to specify some options")
+        .not()
+        .isEmpty()
+        .custom(async (value, { req: { body: { options } } }) => {
+          if (options.length < 2) {
+            throw new Error("You need to specify at least 2 options");
+          }
+          return true;
+        })
+    ]
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    try {
+      // Check if authorized
+      let poll = await Poll.findById(req.params.id);
+      if (poll.owner.toString() !== req.user.id) {
+        return res.status(401).json({ msg: "Not Authorized" });
+      }
+
+      poll = await poll.update(
+        {
+          $set: {
+            title: req.body.title,
+            options: req.body.options
+          }
+        },
+        { new: true }
+      );
+      res.json(poll);
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send("Server Error");
+    }
+  }
+);
 
 module.exports = router;

@@ -7,10 +7,13 @@ import {
   VOTE_POLL_SUCCESS,
   VOTE_POLL_FAILURE,
   DELETE_POLL_SUCCESS,
-  DELETE_POLL_FAILURE
+  DELETE_POLL_FAILURE,
+  GET_PRIVATE_POLLS_SUCCESS,
+  GET_PRIVATE_POLLS_FAILURE
 } from "../actions/types";
 
 const initialState = {
+  privatePolls: [],
   polls: [],
   poll: null,
   error: null,
@@ -27,6 +30,12 @@ export default function(state = initialState, action) {
         isLoading: false,
         polls: payload
       };
+    case GET_PRIVATE_POLLS_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        privatePolls: payload
+      };
     case GET_POLL_SUCCESS:
       return {
         ...state,
@@ -35,6 +44,7 @@ export default function(state = initialState, action) {
       };
     case GET_POLLS_FAILURE:
     case GET_POLL_FAILURE:
+    case GET_PRIVATE_POLLS_FAILURE:
     case VOTE_POLL_FAILURE:
     case DELETE_POLL_FAILURE:
       return {
@@ -53,6 +63,11 @@ export default function(state = initialState, action) {
       };
     }
     case DELETE_POLL_SUCCESS:
+      return {
+        ...state,
+        polls: state.polls.filter(p => p._id !== payload),
+        poll: null
+      };
     case CLEAR_POLL:
       return {
         ...state,

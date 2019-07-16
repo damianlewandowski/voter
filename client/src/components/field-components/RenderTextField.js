@@ -16,6 +16,7 @@ const RenderTextField = ({
       helperText={error}
       warning={warning}
       {...rest}
+      fullWidth
     />
   );
 };

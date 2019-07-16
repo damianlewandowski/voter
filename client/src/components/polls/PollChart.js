@@ -41,8 +41,6 @@ const pieOptions = {
 const PollChart = ({ poll, poll: { title, options, owner, updated } }) => {
   const data = options.map(option => [option.optionName, option.votes.length]);
 
-  console.log(data);
-
   return (
     <div>
       <Chart

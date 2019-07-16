@@ -10,7 +10,6 @@ import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
 import Badge from "@material-ui/core/Badge";
 import AccountCircle from "@material-ui/icons/AccountCircle";
-import MailIcon from "@material-ui/icons/Mail";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import PlusIcon from "@material-ui/icons/AddCircle";
 import MoreIcon from "@material-ui/icons/MoreVert";
@@ -41,6 +40,13 @@ const useStyles = makeStyles(theme => ({
     [theme.breakpoints.up("md")]: {
       display: "none"
     }
+  },
+  icon: {
+    marginRight: theme.spacing(1),
+    display: "flex"
+  },
+  badgeIcon: {
+    marginRight: theme.spacing(2)
   }
 }));
 
@@ -73,17 +79,6 @@ function Navbar({ isAuthenticated, logout, history }) {
   }
 
   const authLinks = [
-    {
-      ariaLabel: "Show 4 new mails",
-      badge: {
-        content: 4,
-        color: "secondary",
-        icon: <MailIcon />
-      },
-      text: "Messages",
-      to: "/messages",
-      onClick: handleMobileMenuClose
-    },
     {
       ariaLabel: "Show 17 new notifications",
       badge: {
@@ -140,7 +135,8 @@ function Navbar({ isAuthenticated, logout, history }) {
               {authLink.badge.icon}
             </Badge>
           )}
-          {authLink.icon}
+          <div className={classes.icon}>{authLink.icon}</div>
+          {authLink.text}
         </IconButton>
       ))}
     </div>

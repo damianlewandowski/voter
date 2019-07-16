@@ -2,6 +2,8 @@ import axios from "axios";
 import {
   GET_POLLS_SUCCESS,
   GET_POLLS_FAILURE,
+  GET_PRIVATE_POLLS_SUCCESS,
+  GET_PRIVATE_POLLS_FAILURE,
   GET_POLL_SUCCESS,
   GET_POLL_FAILURE,
   CLEAR_POLL,
@@ -12,22 +14,51 @@ import {
 } from "./types";
 import { setAlert } from "./alert";
 
-export const getPolls = () => async dispatch => {
+export const getPolls = () => async (dispatch, getState) => {
   try {
     const res = await axios.get("/api/polls");
+    const { auth } = getState();
 
     dispatch({
       type: GET_POLLS_SUCCESS,
-      payload: res.data
+      payload: res.data.map(p => ({
+        ...p,
+        isYours: auth.user ? p.owner === auth.user._id : false
+      }))
     });
   } catch (err) {
+    console.dir(err);
     dispatch({
-      type: GET_POLLS_FAILURE
+      type: GET_POLLS_FAILURE,
+      payload: err.response.data.msg
     });
 
     dispatch(
       setAlert(
         "Could not fetch polls from the server. Try again later.",
+        "error"
+      )
+    );
+  }
+};
+
+export const getPrivatePolls = () => async dispatch => {
+  try {
+    const res = await axios.get("/api/polls/mine");
+
+    dispatch({
+      type: GET_PRIVATE_POLLS_SUCCESS,
+      payload: res.data
+    });
+  } catch (err) {
+    dispatch({
+      type: GET_PRIVATE_POLLS_FAILURE,
+      payload: "Could not fetch private polls"
+    });
+
+    dispatch(
+      setAlert(
+        "Could not fetch private polls from the server. Try again later.",
         "error"
       )
     );
@@ -102,14 +133,19 @@ export const deletePoll = (id, history) => async dispatch => {
     console.log(res);
 
     dispatch({
-      type: DELETE_POLL_SUCCESS
+      type: DELETE_POLL_SUCCESS,
+      payload: id
     });
 
-    history.push("/");
+    dispatch(setAlert("Poll has been succesfully deleted.", "success"));
+
+    if (history) {
+      history.push("/");
+    }
   } catch (err) {
     dispatch({
       type: DELETE_POLL_FAILURE,
-      payload: err.res.data.msg
+      payload: err.response.data
     });
   }
 };
